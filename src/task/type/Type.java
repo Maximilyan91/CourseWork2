@@ -13,6 +13,8 @@ public enum Type {
     Type(String type) {
         this.type = type;
     }
+
+    //TODO: написать методы values() and valuesOf()
 }
 
 
