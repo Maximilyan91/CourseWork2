@@ -1,4 +1,4 @@
-package task.type;
+package type;
 
 /**
  * Класс Тип задачи (личная или рабочая)
@@ -8,13 +8,15 @@ public enum Type {
 
     PERSONAL("Личная");
 
-    private String type;
+    private String name;
 
-    Type(String type) {
-        this.type = type;
+    Type(String name) {
+        this.name = name;
     }
 
-    //TODO: написать методы values() and valuesOf()
+    public String getName() {
+        return name;
+    }
 }
 
 

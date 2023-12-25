@@ -1,13 +1,17 @@
 package task;
 
-import task.type.Type;
+import exception.InCorrectArgumentException;
+import service.TaskService;
+import type.Type;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 
 /**
  * Класс "Задача"
+ * @author Max
  */
 
 public abstract class Task {
@@ -19,20 +23,37 @@ public abstract class Task {
     private String description;
 
     public Task(String title, Type type, String description) {
-        this.title = title;
+        setTitle(title);
         this.type = type;
-        this.description = description;
+        setDescription(description);
         this.id = ++idGenerator;
         this.dateTime = LocalDateTime.now();
+        TaskService.add(this);
     }
 
+    private boolean isCorrectArgument(String arg) throws InCorrectArgumentException {
+        if (arg == null || arg.isEmpty() || arg.isBlank()) {
+            throw new InCorrectArgumentException("Введен неправильный аргумент");
+        } else {
+            return true;
+        }
+    }
+
+    public abstract LocalDateTime getNextTimeTask();
 
     public String getTitle() {
         return title;
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        try {
+            if (isCorrectArgument(title)) {
+                this.title = title;
+            }
+        } catch (InCorrectArgumentException e) {
+            System.out.println(e.getMessage());
+            this.title = "Измените заголовок задачи";
+        }
     }
 
     public Type getType() {
@@ -52,14 +73,25 @@ public abstract class Task {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        try {
+            if (isCorrectArgument(description)) {
+                this.description = description;
+            }
+        } catch (InCorrectArgumentException e) {
+            System.out.println(e.getMessage());
+            this.title = "Измените описание задачи";
+        }
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Task task)) return false;
-        return id == task.id && Objects.equals(title, task.title) && type == task.type && Objects.equals(dateTime, task.dateTime) && Objects.equals(description, task.description);
+        return id == task.id
+                && Objects.equals(title, task.title)
+                && type == task.type
+                && Objects.equals(dateTime, task.dateTime)
+                && Objects.equals(description, task.description);
     }
 
     @Override
@@ -71,9 +103,9 @@ public abstract class Task {
     public String toString() {
         return "Task{" +
                 "title='" + title + '\'' +
-                ", type=" + type +
+                ", type=" + type.getName() +
                 ", id=" + id +
-                ", dateTime=" + dateTime +
+                ", dateTime=" + dateTime.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")) +
                 ", description='" + description + '\'' +
                 '}';
     }
