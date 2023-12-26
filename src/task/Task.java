@@ -22,6 +22,9 @@ public abstract class Task {
     private LocalDateTime dateTime;
     private String description;
 
+    public Task() {
+    }
+
     public Task(String title, Type type, String description) {
         setTitle(title);
         this.type = type;
@@ -33,7 +36,7 @@ public abstract class Task {
 
     private boolean isCorrectArgument(String arg) throws InCorrectArgumentException {
         if (arg == null || arg.isEmpty() || arg.isBlank()) {
-            throw new InCorrectArgumentException("Введен неправильный аргумент");
+            throw new InCorrectArgumentException("Введен неправильный аргумент ");
         } else {
             return true;
         }

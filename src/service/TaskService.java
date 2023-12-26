@@ -38,7 +38,7 @@ public class TaskService {
         Task task = taskMap.get(id);
         if (task == null) {
             throw new TaskNotFoundException(
-                    " Задача с иlентификатором "
+                    " Задача с идентификатором "
                             + id + " не найдена");
         }
         return task;

@@ -6,7 +6,7 @@ package type;
 public enum Type {
     WORK("рабочая"),
 
-    PERSONAL("Личная");
+    PERSONAL("личная");
 
     private String name;
 
