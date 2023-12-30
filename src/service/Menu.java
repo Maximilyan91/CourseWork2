@@ -34,12 +34,15 @@ public class Menu {
         }
         switch (choice) {
             case 1 -> {
+
                String title = inputTaskTitle();
                 String description = inputTaskDescription();
                 Type type = inputTaskType();
                 int repeatability = inputRepeatability();
 
-                createNewTask(title, type, description, repeatability);
+                if (createNewTask(title, type, description, repeatability)) {
+                    System.out.println( "задача создана успешно");
+                }
             }
         }
     }
@@ -124,27 +127,35 @@ public class Menu {
     }
 
 
-    public static void createNewTask(String title,
+    public static boolean createNewTask(String title,
                                      Type type,
                                      String description,
                                      int repeatability ) {
         switch (repeatability) {
             case 1 -> {
                 var task = new OneTimeTask(title, type, description);
+                return true;
             }
             case 2 -> {
                 var task = new DailyTask(title, type, description);
+                return true;
             }
             case 3 -> {
                 var task = new WeeklyTask(title, type, description);
+                return true;
             }
             case 4 -> {
                 var task = new MonthlyTask(title, type, description);
+                return true;
             }
             case 5 -> {
                 var task = new YearlyTask(title, type, description);
+                return true;
             }
-            default -> System.out.println("Ошибка создания задачи");
+            default -> {
+                System.out.println("Ошибка создания задачи");
+                return false;
+            }
         }
     }
 }
