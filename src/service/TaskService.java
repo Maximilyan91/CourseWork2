@@ -12,7 +12,6 @@ public class TaskService {
     private static LinkedList<Task> removedTasks = new LinkedList<>();
 
     public static void add(Task task) {
-
         taskMap.put(task.getId(), task);
     }
 
@@ -26,9 +25,16 @@ public class TaskService {
 
     public static List<Task> getAllByDate(LocalDate date) {
         List<Task> allTasksByDate = new ArrayList<>();
-        for (int i = 1; i <= taskMap.size(); i++) {
-            if (taskMap.get(i).getDateTime().toLocalDate().isEqual(date)) {
-                allTasksByDate.add(taskMap.get(i));
+
+
+        for (Task task : taskMap.values()) {
+            LocalDate taskDate = task.getDateTime().toLocalDate();
+            LocalDate taskNextDate = task.getNextTimeTask().toLocalDate();
+            if (taskDate.equals(date)) {
+                allTasksByDate.add(task);
+            }
+            if (taskNextDate.equals(date)) {
+                allTasksByDate.add(task);
             }
         }
         return allTasksByDate;

@@ -19,6 +19,7 @@ public class Menu {
                         "4 - выход");
     }
 
+
     public static void menu() {
         var br = new BufferedReader(new InputStreamReader(System.in));
         int choice = -1;
@@ -33,11 +34,15 @@ public class Menu {
         }
         switch (choice) {
             case 1 -> {
+               String title = inputTaskTitle();
+                String description = inputTaskDescription();
+                Type type = inputTaskType();
+                int repeatability = inputRepeatability();
 
+                createNewTask(title, type, description, repeatability);
             }
         }
     }
-
 
 
     public static String inputTaskTitle() {
@@ -53,6 +58,7 @@ public class Menu {
         return title;
     }
 
+
     public static String inputTaskDescription() {
         var br = new BufferedReader(new InputStreamReader(System.in));
         String description = "";
@@ -66,23 +72,36 @@ public class Menu {
         return description;
     }
 
+
     public static Type inputTaskType() {
         var br = new BufferedReader(new InputStreamReader(System.in));
-        String inputValue = "";
-        Type type = null;
-        System.out.println("Укажите тип задачи: Личная или Рабочая");
+
+        int userChoice = 0;
+
+        System.out.println("Укажите тип задачи:\n" +
+                "1 - Личная\n" +
+                "2 - Рабочая");
         try {
-            inputValue = br.readLine();
-        } catch (IOException e) {
+            userChoice = Integer.parseInt(br.readLine());
+        } catch (IOException | NumberFormatException e) {
             System.out.println("ошибка ввода типа задачи. Укажите тип заново");
         }
-        return type = Type.valueOf(inputValue.toLowerCase());
+        Type type;
+        switch (userChoice) {
+            case 1 -> type = Type.PERSONAL;
+
+            case 2 -> type = Type.WORK;
+
+            default -> type = Type.PERSONAL;
+        }
+
+        return type;
     }
 
-    public static Task inputRepeatability() {
-        Task task = null;
+
+    public static int inputRepeatability() {
         var br = new BufferedReader(new InputStreamReader(System.in));
-        int repeatability = 0;
+        int userChoice = 0;
         System.out.println("""
                 Выберите повторяемость задачи:
                 1 - однократная
@@ -91,38 +110,41 @@ public class Menu {
                 4 - ежемесячная
                 5 - ежегодная""");
         try {
-            repeatability = Integer.parseInt(br.readLine());
+            userChoice = Integer.parseInt(br.readLine());
         } catch (IOException e) {
             System.out.println(
                     "ошибка ввода частоты повторяемости задачи. " +
                             "Укажите повторяемость заново");
             inputRepeatability();
         }
+        if (userChoice > 0 && userChoice < 6) {
+            return userChoice;
+        }
+        return -1;
+    }
+
+
+    public static void createNewTask(String title,
+                                     Type type,
+                                     String description,
+                                     int repeatability ) {
         switch (repeatability) {
             case 1 -> {
-                OneTimeTask t = (OneTimeTask) task;
+                var task = new OneTimeTask(title, type, description);
             }
             case 2 -> {
-                DailyTask t = (DailyTask) task;
+                var task = new DailyTask(title, type, description);
             }
             case 3 -> {
-                WeeklyTask t = (WeeklyTask) task;
+                var task = new WeeklyTask(title, type, description);
             }
             case 4 -> {
-                MonthlyTask t = (MonthlyTask) task;
+                var task = new MonthlyTask(title, type, description);
             }
             case 5 -> {
-                YearlyTask t = (YearlyTask) task;
+                var task = new YearlyTask(title, type, description);
             }
+            default -> System.out.println("Ошибка создания задачи");
         }
-        return task;
     }
-
-
-    public static void createNewTask() {
-
-
-    }
-
-
 }
